@@ -119,11 +119,8 @@ def validate_for_youtube():
     """Validate that all required config for YouTube publishing is present."""
     errors = validate_for_generation()
 
-    if not YOUTUBE_CLIENT_SECRET_FILE.exists():
-        errors.append(
-            f"YouTube client_secret.json not found at {YOUTUBE_CLIENT_SECRET_FILE}. "
-            "Download it from Google Cloud Console > APIs & Services > Credentials."
-        )
+    # Only token.json is strictly required for CI/CD (it contains the refresh token).
+    # client_secret.json is only needed for the initial local authentication.
     if not YOUTUBE_TOKEN_FILE.exists():
         errors.append(
             f"YouTube token.json not found. Run: python -m modules.youtube_publisher --auth"
