@@ -184,7 +184,11 @@ def render_video(
         from moviepy.editor import concatenate_videoclips
         bg_clip = concatenate_videoclips([bg_clip] * loops_needed)
 
-    bg_clip = bg_clip.subclip(0, total_duration)
+    # Random start point
+    import random
+    max_bg_start = max(0, bg_clip.duration - total_duration)
+    bg_start = random.uniform(0, max_bg_start)
+    bg_clip = bg_clip.subclip(bg_start, bg_start + total_duration)
 
     # Resize to 1080x1920 (9:16) if needed
     bg_clip = bg_clip.resize((config.VIDEO_WIDTH, config.VIDEO_HEIGHT))
@@ -245,8 +249,14 @@ def render_video(
             from moviepy.editor import concatenate_audioclips
             loops_needed = int(total_duration / music_clip.duration) + 1
             music_clip = concatenate_audioclips([music_clip] * loops_needed)
-
-        music_clip = music_clip.subclip(0, total_duration).volumex(config.MUSIC_VOLUME)
+            
+        # Random start point for music
+        max_music_start = max(0, music_clip.duration - total_duration)
+        # We cap it so it doesn't always play the quiet outro of a song
+        # Try to keep start point within the first 60 seconds if possible, or up to max_music_start
+        music_start = random.uniform(0, min(60, max_music_start) if max_music_start > 0 else 0)
+        
+        music_clip = music_clip.subclip(music_start, music_start + total_duration).volumex(config.MUSIC_VOLUME)
         final_clip = final_clip.set_audio(music_clip)
     except FileNotFoundError:
         print("⚠️  No background music found, rendering without music.")

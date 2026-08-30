@@ -44,25 +44,36 @@ def cmd_generate(args) -> tuple:
         print(f"   Add assets to: {config.ASSETS_DIR}")
         sys.exit(1)
 
-    # Step 1: Generate story slides with Gemini
-    print("\n" + "=" * 50)
-    print("📝 STEP 1: Generating story script...")
-    print("=" * 50)
+    import random
+    
+    # 1. Randomize slides and duration
+    num_slides = random.choice([6, 7, 8])
+    total_duration = random.choice([30, 35, 40])
+    calculated_slide_duration = total_duration / num_slides
 
-    story = generate_story_slides(topic=args.topic)
+    print("\n==================================================")
+    print(f"🎬 STEP 1: Generating story script ({num_slides} slides, {total_duration}s total)...")
+    print("==================================================")
+    story = generate_story_slides(
+        topic=args.topic,
+        num_slides=num_slides
+    )
+    
+    if not story or "slides" not in story:
+        print("❌ Failed to generate script.")
+        sys.exit(1)
 
     print(f"\n📖 Title: {story['title']}")
     for i, slide in enumerate(story["slides"], 1):
         print(f"   Slide {i}: {slide[:60]}...")
 
-    # Step 2: Render video
-    print("\n" + "=" * 50)
+    print("\n==================================================")
     print("🎬 STEP 2: Rendering video...")
-    print("=" * 50)
+    print("==================================================")
 
     video_path = render_video(
         slides=story["slides"],
-        slide_duration=args.slide_duration,
+        slide_duration=calculated_slide_duration,
     )
 
     print(f"\n🎉 Video generated successfully!")
