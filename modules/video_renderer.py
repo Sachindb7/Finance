@@ -177,6 +177,7 @@ def render_video(
     print(f"🎮 Background: {bg_path.name}")
 
     bg_clip = VideoFileClip(str(bg_path))
+    bg_clip = bg_clip.without_audio()
 
     # If background is shorter than needed, loop it
     if bg_clip.duration < total_duration:
