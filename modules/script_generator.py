@@ -95,10 +95,20 @@ LANGUAGE STYLE — Randomly pick ONE of these two styles for this video:
 HOOK RULES (MOST IMPORTANT):
 - Slide 1 MUST be a "MUST SEE" hook, not a "nice to see" hook.
 - "Must see" means the viewer feels PERSONALLY attacked or involved. Create an information gap they NEED to close.
-- BAD hook: "Ek aadmi ne ₹200 Crore loote" (interesting but skippable)
+- BAD hook: "Ek aadmi ne ₹1200 Crore loote" (interesting but skippable)
 - GOOD hook: "Tu jo Zomato se khaana khaata hai, usmein scam hai" (PERSONAL, can't scroll past)
 - GOOD hook: "Tere jeb mein jo cheez hai, wo ISI aadmi ne banayi" (CURIOSITY gap)
 - The hook must make the viewer think "yeh toh mujhse related hai, dekhna padega"
+
+NARRATIVE VARIETY & PLOT TROPES (CRITICAL FOR ENGAGEMENT):
+DO NOT use the generic "someone took money and vanished" or "poor guy worked hard and got rich" tropes. They are BORING!
+Instead, RANDOMLY pick ONE of these advanced narrative structures for this video:
+1. The Inside Betrayal: The mastermind wasn't a stranger, but a trusted CA, best friend, or auditor.
+2. The System Loophole: They didn't rob a bank. They found a 0.01% glitch in a software/tax code and milked it quietly.
+3. The Fake Persona: A scammer who successfully pretended to be a Royal Prince, fake CBI officer, or fake billionaire.
+4. The Revenge Empire (Business): They were insulted by an arrogant giant, so they built a rival company purely out of spite to destroy them.
+5. The Accidental Genius (Business): A billion-dollar empire built by complete accident, a failed experiment, or sheer laziness.
+6. The Dumb Mistake: The perfect ₹500 Crore scam was ruined because of a ridiculous ₹5 mistake, a Swiggy order, or a spelling error.
 
 SLIDE RULES:
 - Total slides: exactly {num_slides}
