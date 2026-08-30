@@ -18,9 +18,9 @@ on:
           - instagram
           - both
 
-  # Auto-trigger: Daily at 6 PM IST (12:30 PM UTC)
+  # Auto-trigger: 12:00 PM IST (06:30 UTC) and 7:00 PM IST (13:30 UTC)
   schedule:
-    - cron: '30 12 * * *'
+    - cron: '30 6,13 * * *'
 
 jobs:
   generate-and-publish:
