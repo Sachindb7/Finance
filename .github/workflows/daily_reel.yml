@@ -1,0 +1,93 @@
+name: Daily Reel Generator
+
+on:
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Story topic/niche'
+        required: false
+        default: 'Indian financial scams and dark money stories'
+      platform:
+        description: 'Publish platform'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - youtube
+          - instagram
+          - both
+
+  # Auto-trigger: Daily at 6 PM IST (12:30 PM UTC)
+  schedule:
+    - cron: '30 12 * * *'
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create .env file from secrets
+        run: |
+          cat > .env << EOF
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          INSTAGRAM_USER_ID=${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          YOUTUBE_PRIVACY=public
+          EOF
+
+      - name: Setup YouTube credentials
+        if: contains(fromJSON('["youtube", "both"]'), github.event.inputs.platform || 'both')
+        run: |
+          echo '${{ secrets.YOUTUBE_CLIENT_SECRET }}' > client_secret.json
+          echo '${{ secrets.YOUTUBE_TOKEN }}' > token.json
+
+      - name: Restore generation history
+        continue-on-error: true
+        uses: actions/cache@v4
+        with:
+          path: generated_history.json
+          key: reel-history-${{ github.run_number }}
+          restore-keys: reel-history-
+
+      - name: Generate and Publish Reel
+        run: |
+          TOPIC="${{ github.event.inputs.topic || 'Indian financial scams and dark money stories' }}"
+          PLATFORM="${{ github.event.inputs.platform || 'both' }}"
+          python main.py publish --platform "$PLATFORM" --topic "$TOPIC"
+
+      - name: Save generation history
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: generated_history.json
+          key: reel-history-${{ github.run_number }}
+
+      - name: Upload generated video as artifact (backup)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-reel-${{ github.run_number }}
+          path: |
+            output/*.mp4
+            output/*.txt
+          retention-days: 7

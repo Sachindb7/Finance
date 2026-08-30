@@ -1,0 +1,27 @@
+# Environment & Secrets
+.env
+token.json
+client_secrets.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+venv/
+.venv/
+
+# Generated output videos (too large for git)
+output/
+*.mp4
+!assets/backgrounds/*.mp4
+!assets/music/*.mp3
+
+# Temp files
+*TEMP_MPY*
+*.tmp
+publish_existing.py
+
+# IDE
+.vscode/
+.idea/
